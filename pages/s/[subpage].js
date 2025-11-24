@@ -2,6 +2,7 @@ import BLOG from '@/blog.config'
 import Layout from '@/layouts/layout'
 import { getAllPosts, getPostBlocks } from '@/lib/notion'
 import { useRouter } from 'next/router'
+import { requireNotionPageId } from '@/lib/notion/env'
 
 import { getAllPagesInSpace, getPageBreadcrumbs, idToUuid } from 'notion-utils'
 import { defaultMapPageUrl } from 'react-notion-x'
@@ -25,10 +26,11 @@ const Post = ({ post, blockMap }) => {
 }
 
 export async function getStaticPaths() {
-  const mapPageUrl = defaultMapPageUrl(BLOG.notionPageId)
+  const notionPageId = requireNotionPageId()
+  const mapPageUrl = defaultMapPageUrl(notionPageId)
 
   const pages = await getAllPagesInSpace(
-    BLOG.notionPageId,
+    notionPageId,
     BLOG.notionSpacesId,
     getPostBlocks,
     {
