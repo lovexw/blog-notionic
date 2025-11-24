@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   i18n: {
     locales: ['en', 'zh'],
@@ -65,5 +67,20 @@ module.exports = {
         destination: 'https://www.craft.do/404'
       }
     ]
+  },
+  webpack: (config) => {
+    let hasSharp = true
+
+    try {
+      require.resolve('sharp')
+    } catch (error) {
+      hasSharp = false
+    }
+
+    if (!hasSharp) {
+      config.resolve.alias['sharp'] = path.resolve(__dirname, 'lib/sharp-stub.js')
+    }
+
+    return config
   }
 }
